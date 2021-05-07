@@ -25,6 +25,7 @@ jobs:
       - name: Build docker container
         uses: docker/build-push-action@v2
         with:
+          tags: puchatek_w_szortach/fastapi_demo:latest
           file: ./docker/app.Dockerfile
       - run: docker image ls
       # - name: run commit stage tests
