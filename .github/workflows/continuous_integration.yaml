@@ -27,7 +27,6 @@ jobs:
         with:
           tags: puchatek_w_szortach/fastapi_demo:latest
           file: ./docker/app.Dockerfile
-      - run: docker image ls
-      # - name: run commit stage tests
-      #   run: |
-      #     docker run --rm -v $PWD:/app puchatek_w_szortach/fastapi_demo:latest invoke tests.commit-stage
+      - name: run commit stage tests
+        run: |
+          docker run --rm -v $PWD:/app puchatek_w_szortach/fastapi_demo:latest invoke tests.commit-stage
