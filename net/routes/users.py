@@ -51,6 +51,10 @@ def get_selected_user(user_id: str):
     Get data about specified user
     """
 
+    if user_id not in users.keys():
+
+        raise fastapi.HTTPException(status_code=fastapi.status.HTTP_404_NOT_FOUND)
+
     return users[user_id]
 
 
