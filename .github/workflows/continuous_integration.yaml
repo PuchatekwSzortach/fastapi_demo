@@ -27,11 +27,11 @@ jobs:
         with:
           tags: puchatek_w_szortach/fastapi_demo:latest
           file: ./docker/app.Dockerfile
-      - name: debugging
-        run: |
+      - run: |
+          ls
+      - run: |
           docker run --rm -v $PWD:/app puchatek_w_szortach/fastapi_demo:latest bash -c "ls"
-      - name: debugging 2
-        run: |
+      - run: |
           docker run --rm -v $PWD:/app puchatek_w_szortach/fastapi_demo:latest bash -c "invoke --list"
       # - name: run commit stage tests
       #   run: |
