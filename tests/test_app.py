@@ -1,5 +1,5 @@
 """
-Dummy test file
+Tests for fastapi app routes
 """
 
 import fastapi.testclient
