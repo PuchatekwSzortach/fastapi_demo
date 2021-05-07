@@ -26,7 +26,7 @@ class UserResponse(pydantic.BaseModel):
 
 class ItemPostRequest(pydantic.BaseModel):
     """
-    Model for POST etms request
+    Model for POST items request
     """
 
     name: str
@@ -34,7 +34,7 @@ class ItemPostRequest(pydantic.BaseModel):
 
 class ItemResponse(pydantic.BaseModel):
     """
-    Model for responses of users related api endpoints
+    Model for responses of items related api endpoints
     """
 
     id: str

@@ -63,10 +63,10 @@ def post_user(user_data: net.models.ItemPostRequest):
     # Hard code owner id for now
     data["owner_id"] = "007"
 
-    # Create user instance
+    # Create item instance
     item = net.models.ItemResponse(**data)
 
-    # Add user to our "database"
+    # Add item to our "database"
     items[item.id] = item
 
     # Return response
