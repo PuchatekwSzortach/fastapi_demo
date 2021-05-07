@@ -22,3 +22,21 @@ class UserResponse(pydantic.BaseModel):
     name: str
     id: str
     age: int
+
+
+class ItemPostRequest(pydantic.BaseModel):
+    """
+    Model for POST etms request
+    """
+
+    name: str
+
+
+class ItemResponse(pydantic.BaseModel):
+    """
+    Model for responses of users related api endpoints
+    """
+
+    id: str
+    owner_id: str
+    name: str

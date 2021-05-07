@@ -7,28 +7,28 @@ import fastapi.testclient
 import net.applications
 
 
-def test_get_users():
+def test_get_items():
     """
-    Test GET /users endpoint
+    Test GET /items endpoint
     """
 
     app = net.applications.get_fastapi_app()
     client = fastapi.testclient.TestClient(app)
 
-    response = client.get("/users")
+    response = client.get("/items")
 
     assert response.status_code == 200
     assert len(response.json()) > 0
 
 
-def test_get_user_with_invalid_id():
+def test_get_item_with_invalid_id():
     """
-    Test GET /users/{user_id} endpoint with invalid id
+    Test GET /items/{item_id} endpoint with invalid id
     """
 
     app = net.applications.get_fastapi_app()
     client = fastapi.testclient.TestClient(app)
 
-    response = client.get("/users/dummy_id")
+    response = client.get("/items/dummy_id")
 
     assert response.status_code == 404
