@@ -6,6 +6,9 @@ import pydantic
 
 
 class UserResponse(pydantic.BaseModel):
+    """
+    Model for responses of users related api endpoints
+    """
 
     name: str
     id: str

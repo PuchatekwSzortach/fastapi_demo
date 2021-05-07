@@ -44,10 +44,10 @@ def get_users():
     return list(users.values())
 
 
-@router.get("/users/{id}", response_model=net.models.UserResponse)
-def get_selected_user(id: str):
+@router.get("/users/{user_id}", response_model=net.models.UserResponse)
+def get_selected_user(user_id: str):
     """
     Get data about specified user
     """
 
-    return users[id]
+    return users[user_id]
