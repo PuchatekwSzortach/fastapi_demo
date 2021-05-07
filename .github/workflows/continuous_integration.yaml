@@ -24,7 +24,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           file: ./docker/app.Dockerfile
-          push: false
+          outputs:
+            - type=image
           tags: puchatek_w_szortach/fastapi_demo:latest
       - run: docker image ls
       # - name: run commit stage tests
