@@ -32,10 +32,16 @@ def run(context, config_path):
         config_path (str): path to configuration file
     """
 
+    import os
+
+    tmp_directory_path = "/tmp/fast_api_demo_tmp"
+    os.makedirs(tmp_directory_path, exist_ok=True)
+
     command = (
         "docker run -it --rm "
         # Attach container to same network as docker-compose set up for backend services
         "-v $PWD:/app:delegated "
+        f"-v {tmp_directory_path}:/tmp "
         "-p 8000:8000 "
         "puchatek_w_szortach/fastapi_demo:latest /bin/bash"
     )

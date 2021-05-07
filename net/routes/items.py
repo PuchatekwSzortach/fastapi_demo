@@ -6,43 +6,38 @@ import random
 import typing
 
 import fastapi
+import net.authentication
 
 import net.models
 
 
 router = fastapi.APIRouter()
 
-
-items = {
-    "1": {
-        "name": "luggage",
-        "id": "1",
-        "owner_id": "007"
-    },
-    "2": {
-        "name": "honey",
-        "id": "2",
-        "owner_id": "13"
-    }
-}
+# Pitiful excuse of a database ^^;
+items = {}
 
 
 @router.get("/items", response_model=typing.List[net.models.ItemResponse])
-def get_items():
+def get_items(
+    user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())
+):
     """
     Get data about all items
     """
 
-    return list(items.values())
+    user_items = [item for item in items.values() if item["owner_id"] == str(user.id)]
+    return user_items
 
 
 @router.get("/items/{item_id}", response_model=net.models.ItemResponse)
-def get_selected_item(item_id: str):
+def get_selected_item(
+        item_id: str,
+        user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())):
     """
     Get data about specified user
     """
 
-    if item_id not in items.keys():
+    if item_id not in items.keys() or items[item_id]["owner_id"] != str(user.id):
 
         raise fastapi.HTTPException(status_code=fastapi.status.HTTP_404_NOT_FOUND)
 
@@ -50,7 +45,9 @@ def get_selected_item(item_id: str):
 
 
 @router.post("/items", response_model=net.models.ItemResponse)
-def post_user(user_data: net.models.ItemPostRequest):
+def post_item(
+        user_data: net.models.ItemPostRequest,
+        user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())):
     """
     Create a new item
     """
@@ -61,13 +58,13 @@ def post_user(user_data: net.models.ItemPostRequest):
     data["id"] = str(random.randint(0, 100))
 
     # Hard code owner id for now
-    data["owner_id"] = "007"
+    data["owner_id"] = str(user.id)
 
     # Create item instance
     item = net.models.ItemResponse(**data)
 
     # Add item to our "database"
-    items[item.id] = item
+    items[item.id] = item.dict()
 
     # Return response
     return item
