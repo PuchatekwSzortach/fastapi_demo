@@ -20,7 +20,7 @@ def static_code_analysis(context):
     :param context: invoke.Context instance
     """
 
-    directories = "net tests"
+    directories = "net scripts tests"
 
     context.run("pycodestyle {}".format(directories), echo=True)
     context.run("xenon . --max-absolute B", echo=True)
