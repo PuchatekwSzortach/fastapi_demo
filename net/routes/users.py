@@ -2,6 +2,7 @@
 Users routes
 """
 
+import random
 import typing
 
 import fastapi
@@ -51,3 +52,24 @@ def get_selected_user(user_id: str):
     """
 
     return users[user_id]
+
+
+@router.post("/users", response_model=net.models.UserResponse)
+def post_user(user_data: net.models.UserPostRequest):
+    """
+    Create a new user
+    """
+
+    data = user_data.dict()
+
+    # Create id, don't care about keys collisions for now
+    data["id"] = str(random.randint(0, 100))
+
+    # Create user instance
+    user = net.models.UserResponse(**data)
+
+    # Add user to our "database"
+    users[user.id] = user
+
+    # Return response
+    return user
