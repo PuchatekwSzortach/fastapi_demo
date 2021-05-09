@@ -7,6 +7,7 @@ import fastapi_users.db
 import fastapi_users.models
 import pydantic
 import sqlalchemy.ext.declarative
+import sqlalchemy.orm
 
 import net.authentication
 import net.globals
@@ -62,6 +63,9 @@ engine = sqlalchemy.create_engine(
 )
 
 
+session_maker = sqlalchemy.orm.sessionmaker(bind=engine)
+
+
 Base.metadata.create_all(engine)
 
 user_db = fastapi_users.db.SQLAlchemyUserDatabase(
@@ -71,6 +75,7 @@ user_db = fastapi_users.db.SQLAlchemyUserDatabase(
 
 
 authentication_backends = net.authentication.get_fastapi_users_authentication_backends()
+
 
 fastapi_users_app = fastapi_users.FastAPIUsers(
     db=user_db,

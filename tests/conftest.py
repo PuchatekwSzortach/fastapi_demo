@@ -9,9 +9,10 @@ import pytest
 
 import net.applications
 import net.globals
+import net.models
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 def test_config() -> dict:
     """
     Get test configuration
@@ -24,8 +25,21 @@ def test_config() -> dict:
     return net.globals.get_config()
 
 
+@pytest.fixture(scope="function", name="initialize_services")
+def fixture_initialize_services():
+    """
+    Initialize services:
+    - delete users data
+    """
+
+    # Delete previous da
+    session = net.models.session_maker()
+    session.query(net.models.UserTable).delete()
+    session.commit()
+
+
 @pytest.fixture(scope="function")
-def bootstrap_user_data() -> tuple[fastapi.testclient.TestClient, str]:
+def bootstrap_user_data(initialize_services) -> tuple[fastapi.testclient.TestClient, str]:
     """
     Bootstrap user data:
     - registers user
