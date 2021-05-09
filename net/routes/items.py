@@ -44,7 +44,7 @@ def get_selected_item(
     return items[item_id]
 
 
-@router.post("/items", response_model=net.models.ItemResponse)
+@router.post("/items", response_model=net.models.ItemResponse, status_code=201)
 def post_item(
         user_data: net.models.ItemPostRequest,
         user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())):

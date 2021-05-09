@@ -2,36 +2,33 @@
 Tests for fastapi app routes
 """
 
-import fastapi.testclient
-import pytest
 
-import net.applications
-
-
-@pytest.mark.skip(reason="need to fix authentication first")
-def test_get_items():
+def test_get_items(bootstrap_user_data):
     """
     Test GET /items endpoint
     """
 
-    app = net.applications.get_fastapi_app()
-    client = fastapi.testclient.TestClient(app)
+    client, access_token = bootstrap_user_data
 
-    response = client.get("/items")
+    response = client.get(
+        "/items",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
 
     assert response.status_code == 200
     assert len(response.json()) > 0
 
 
-@pytest.mark.skip(reason="need to fix authentication first")
-def test_get_item_with_invalid_id():
+def test_get_item_with_invalid_id(bootstrap_user_data):
     """
     Test GET /items/{item_id} endpoint with invalid id
     """
 
-    app = net.applications.get_fastapi_app()
-    client = fastapi.testclient.TestClient(app)
+    client, access_token = bootstrap_user_data
 
-    response = client.get("/items/dummy_id")
+    response = client.get(
+        "/items/dummy_id",
+        headers={"Authorization": f"Bearer {access_token}"}
+    )
 
     assert response.status_code == 404
