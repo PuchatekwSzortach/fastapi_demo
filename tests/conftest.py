@@ -32,7 +32,7 @@ def fixture_initialize_services():
     - delete users data
     """
 
-    # Delete previous da
+    # Delete users table data
     session = net.models.session_maker()
     session.query(net.models.UserTable).delete()
     session.commit()
