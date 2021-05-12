@@ -6,6 +6,7 @@ import fastapi
 
 import net.models
 import net.routes.items
+import net.routes.slogans
 
 
 def get_fastapi_app() -> fastapi.FastAPI:
@@ -32,13 +33,22 @@ def get_fastapi_app() -> fastapi.FastAPI:
     )
 
     app.include_router(
-        net.models.fastapi_users_app.get_register_router(),
-        tags=["authentication"]
+        net.models.fastapi_users_app.get_register_router(
+            net.models.PostRegisterHelper(
+                database_instance=net.models.database,
+                users_table=net.models.UserTable.__table__).on_after_register
+        ),
+        tags=["authentication"],
     )
 
     app.include_router(
         net.routes.items.router,
         tags=["items"]
+    )
+
+    app.include_router(
+        net.routes.slogans.router,
+        tags=["slogans"]
     )
 
     return app

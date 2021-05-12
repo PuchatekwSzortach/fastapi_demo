@@ -2,10 +2,16 @@
 Module with models definitions
 """
 
+import uuid
+import typing
+
 import databases
+import fastapi
+import fastapi_users
 import fastapi_users.db
 import fastapi_users.models
 import pydantic
+import sqlalchemy
 import sqlalchemy.ext.declarative
 import sqlalchemy.orm
 
@@ -41,7 +47,8 @@ class UserDB(User, fastapi_users.models.BaseUserDB):
     """
     Pydantic representation of user in database
     """
-    pass
+
+    uniquifier: typing.Optional[str]
 
 
 DATABASE_URL = net.globals.CONFIG["database_url"]
@@ -55,7 +62,7 @@ class UserTable(Base, fastapi_users.db.SQLAlchemyBaseUserTable):
     Sqlalchemy representation of Users ORM class
     """
 
-    pass
+    uniquifier = sqlalchemy.Column(sqlalchemy.String(length=36), nullable=True)
 
 
 engine = sqlalchemy.create_engine(
@@ -67,6 +74,7 @@ session_maker = sqlalchemy.orm.sessionmaker(bind=engine)
 
 
 Base.metadata.create_all(engine)
+
 
 user_db = fastapi_users.db.SQLAlchemyUserDatabase(
     user_db_model=UserDB,
@@ -103,3 +111,25 @@ class ItemResponse(pydantic.BaseModel):
     id: str
     owner_id: str
     name: str
+
+
+class PostRegisterHelper:
+    """
+    Class wrapping up fastapi_users on after register callback
+    """
+
+    def __init__(self, database_instance, users_table) -> None:
+
+        self.database = database_instance
+        self.users_table = users_table
+
+    async def on_after_register(self, user: UserDB, request: fastapi.Request):
+        """
+        Updates user's uniquifier field
+        """
+
+        query = self.users_table.update().where(self.users_table.c.id == user.id).values(
+            {"uniquifier": str(uuid.uuid4())}
+        )
+
+        await self.database.execute(query)
