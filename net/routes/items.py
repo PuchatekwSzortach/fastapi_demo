@@ -6,10 +6,9 @@ import random
 import typing
 
 import fastapi
-from fastapi.exceptions import HTTPException
-from starlette.status import HTTP_404_NOT_FOUND
-import net.authentication
+import starlette.status
 
+import net.authentication
 import net.models
 
 
@@ -49,7 +48,7 @@ def get_selected_item(
     ).one_or_none()
 
     if item is None:
-        raise HTTPException(status_code=HTTP_404_NOT_FOUND)
+        raise fastapi.HTTPException(status_code=starlette.status.HTTP_404_NOT_FOUND)
 
     return item
 
