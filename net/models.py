@@ -65,6 +65,18 @@ class UserTable(Base, fastapi_users.db.SQLAlchemyBaseUserTable):
     uniquifier = sqlalchemy.Column(sqlalchemy.String(length=36), nullable=True)
 
 
+class ItemsTable(Base):
+    """
+    Simple items table
+    """
+
+    __tablename__ = "items"
+
+    id = sqlalchemy.Column(sqlalchemy.String(length=36), primary_key=True)
+    owner_id = sqlalchemy.Column(sqlalchemy.String(length=36), nullable=False)
+    name = sqlalchemy.Column(sqlalchemy.String(length=256), nullable=False)
+
+
 engine = sqlalchemy.create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}
 )
@@ -111,6 +123,12 @@ class ItemResponse(pydantic.BaseModel):
     id: str
     owner_id: str
     name: str
+
+    class Config:
+        """
+        Config
+        """
+        orm_mode = True
 
 
 class PostRegisterHelper:
