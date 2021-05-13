@@ -6,15 +6,13 @@ import random
 import typing
 
 import fastapi
-import net.authentication
+import starlette.status
 
+import net.authentication
 import net.models
 
 
 router = fastapi.APIRouter()
-
-# Pitiful excuse of a database ^^;
-items = {}
 
 
 @router.get("/items", response_model=typing.List[net.models.ItemResponse])
@@ -25,8 +23,13 @@ def get_items(
     Get data about all items
     """
 
-    user_items = [item for item in items.values() if item["owner_id"] == str(user.id)]
-    return user_items
+    session = net.models.session_maker()
+
+    items = session.query(net.models.ItemsTable).filter(
+        net.models.ItemsTable.owner_id == str(user.id)
+    ).all()
+
+    return items
 
 
 @router.get("/items/{item_id}", response_model=net.models.ItemResponse)
@@ -37,34 +40,40 @@ def get_selected_item(
     Get data about specified user
     """
 
-    if item_id not in items.keys() or items[item_id]["owner_id"] != str(user.id):
+    session = net.models.session_maker()
 
-        raise fastapi.HTTPException(status_code=fastapi.status.HTTP_404_NOT_FOUND)
+    item = session.query(net.models.ItemsTable).filter(
+        net.models.ItemsTable.owner_id == str(user.id),
+        net.models.ItemsTable.id == item_id,
+    ).one_or_none()
 
-    return items[item_id]
+    if item is None:
+        raise fastapi.HTTPException(status_code=starlette.status.HTTP_404_NOT_FOUND)
+
+    return item
 
 
 @router.post("/items", response_model=net.models.ItemResponse, status_code=201)
 def post_item(
-        user_data: net.models.ItemPostRequest,
+        item_data: net.models.ItemPostRequest,
         user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())):
     """
     Create a new item
     """
 
-    data = user_data.dict()
+    session = net.models.session_maker()
 
-    # Create id, don't care about keys collisions for now
-    data["id"] = str(random.randint(0, 100))
+    database_item = net.models.ItemsTable(
+        id=str(random.randint(0, 1000)),
+        owner_id=str(user.id),
+        name=item_data.name
+    )
 
-    # Hard code owner id for now
-    data["owner_id"] = str(user.id)
+    # Create response instance
+    item = net.models.ItemResponse.from_orm(database_item)
 
-    # Create item instance
-    item = net.models.ItemResponse(**data)
-
-    # Add item to our "database"
-    items[item.id] = item.dict()
+    session.add(database_item)
+    session.commit()
 
     # Return response
     return item
