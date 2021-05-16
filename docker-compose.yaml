@@ -1,0 +1,16 @@
+version: "3.9"
+
+networks:
+    fastapi_demo_network:
+
+services:
+    database:
+        image: "mysql:5.7.34"
+        container_name: "${mysql_container_name}"
+        ports:
+            - "${mysql_port}:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: admin
+
+        networks:
+            - fastapi_demo_network
