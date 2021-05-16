@@ -38,39 +38,43 @@ def run(context):
 
     container_name = "fastapi_demo"
 
-    command = (
-        "docker run -d -t "
-        f"--name {container_name} "
-        # Attach container to same network as docker-compose set up for backend services
-        "-v $PWD:/app:delegated "
-        f"-v {tmp_directory_path}:/tmp "
-        "-p 8000:8000 "
-        "puchatek_w_szortach/fastapi_demo:latest"
-    )
-
-    context.run(command, pty=True, echo=True)
-
-    for environment in ["development", "test"]:
-
-        network_name = f"{environment}_fastapi_demo_network"
+    try:
 
         command = (
-            f"docker network connect {network_name} {container_name}"
+            "docker run -d -t "
+            f"--name {container_name} "
+            # Attach container to same network as docker-compose set up for backend services
+            "-v $PWD:/app:delegated "
+            f"-v {tmp_directory_path}:/tmp "
+            "-p 8000:8000 "
+            "puchatek_w_szortach/fastapi_demo:latest"
         )
 
         context.run(command, pty=True, echo=True)
 
-    command = (
-        f"docker exec -it {container_name} bash"
-    )
+        for environment in ["development", "test"]:
 
-    context.run(command, pty=True, echo=True)
+            network_name = f"{environment}_fastapi_demo_network"
 
-    command = (
-        f"docker rm -f {container_name}"
-    )
+            command = (
+                f"docker network connect {network_name} {container_name}"
+            )
 
-    context.run(command, pty=True, echo=True)
+            context.run(command, pty=True, echo=True)
+
+        command = (
+            f"docker exec -it {container_name} bash"
+        )
+
+        context.run(command, pty=True, echo=True)
+
+    finally:
+
+        command = (
+            f"docker rm -f {container_name}"
+        )
+
+        context.run(command, pty=True, echo=True)
 
 
 def run_docker_compose_command(context: invoke.Context, environment: str, command: str):
@@ -85,10 +89,7 @@ def run_docker_compose_command(context: invoke.Context, environment: str, comman
 
     valid_environments = {"development", "test"}
 
-    if environment not in {"development", "test"}:
-        raise ValueError(f"Invalid environment {environment}, must be one of {valid_environments}")
-
-    if environment not in {"development", "test"}:
+    if environment not in valid_environments:
         raise ValueError(f"Invalid environment {environment}, must be one of {valid_environments}")
 
     env_file_path = f".env.{environment}.env"
