@@ -5,6 +5,7 @@ FROM python:3.9.5-slim-buster
 # Install a few necessary need or useful libs and apps
 RUN apt update && apt install -y \
     default-libmysqlclient-dev \
+    iputils-ping \
     gcc \
     wget vim
 
