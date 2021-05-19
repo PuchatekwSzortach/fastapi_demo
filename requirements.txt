@@ -1,6 +1,8 @@
+aiomysql==0.0.21
 aiosqlite==0.17.0
 astroid==2.5.6
 asttokens==2.0.5
+asyncio==3.4.3
 attrs==21.1.0
 bcrypt==3.2.0
 certifi==2020.12.5
@@ -8,6 +10,7 @@ cffi==1.14.5
 chardet==4.0.0
 click==7.1.2
 colorama==0.4.4
+cryptography==3.4.7
 databases==0.4.3
 Deprecated==1.2.12
 dnspython==2.1.0
@@ -30,6 +33,7 @@ lazy-object-proxy==1.6.0
 makefun==1.11.3
 mando==0.6.4
 mccabe==0.6.1
+mysqlclient==2.0.3
 packaging==20.9
 passlib==1.7.4
 pluggy==0.13.1
@@ -37,10 +41,12 @@ py==1.10.0
 pycodestyle==2.7.0
 pycparser==2.20
 pydantic==1.8.1
+pydotenv==0.0.7
 pyflakes==2.3.1
 Pygments==2.9.0
 PyJWT==2.0.1
 pylint==2.8.2
+PyMySQL==0.9.3
 pyparsing==2.4.7
 pytest==6.2.4
 pytest-env==0.6.2

@@ -4,6 +4,7 @@ Module with applications objects builders
 
 import fastapi
 
+import net.globals
 import net.models
 import net.routes.items
 import net.routes.slogans
