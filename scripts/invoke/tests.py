@@ -65,7 +65,9 @@ def inserts_count_check(context):
         patterns = [
             ".devcontainer",
             ".pylintrc",
-            ".gitignore"
+            ".gitignore",
+            "alembic.ini",
+            "alembic/script.py"
         ]
 
         for pattern in patterns:
