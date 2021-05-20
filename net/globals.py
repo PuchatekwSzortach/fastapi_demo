@@ -2,8 +2,9 @@
 Module with globals - because some of them you can't really avoid ><
 """
 
-import os
 import functools
+import os
+import time
 
 import pydotenv
 import sqlalchemy_utils.functions
@@ -18,6 +19,8 @@ def get_config() -> dict:
     Returns:
         dict: configuration
     """
+
+    time.sleep(10)
 
     with open(os.environ["CONFIG_PATH"]) as file:
 
