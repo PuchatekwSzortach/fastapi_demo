@@ -6,7 +6,6 @@ import os
 
 import fastapi.testclient
 import pytest
-import sqlalchemy_utils.functions
 
 import net.applications
 import net.globals
@@ -27,17 +26,11 @@ def fixture_test_config() -> dict:
 
 
 @pytest.fixture(scope="function", name="initialize_services")
-def fixture_initialize_services(test_config):
+def fixture_initialize_services():
     """
     Initialize services:
     - delete users data
     """
-
-    if not sqlalchemy_utils.functions.database_exists(url=test_config["mysql_connection_string"]):
-
-        sqlalchemy_utils.functions.create_database(
-            url=test_config["mysql_connection_string"]
-        )
 
     # Delete users table data
     session = net.models.session_maker()

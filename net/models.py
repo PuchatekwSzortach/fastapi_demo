@@ -53,6 +53,7 @@ class UserDB(User, fastapi_users.models.BaseUserDB):
 
 DATABASE_URL = net.globals.CONFIG["mysql_connection_string"]
 
+
 database = databases.Database(DATABASE_URL)
 
 Base: sqlalchemy.ext.declarative.DeclarativeMeta = sqlalchemy.ext.declarative.declarative_base()
