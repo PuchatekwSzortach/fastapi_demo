@@ -27,7 +27,7 @@ def get_config() -> dict:
 
     config["mysql_connection_string"] = (
         f"mysql://root:{dot_environment['mysql_password']}"
-        f"@{dot_environment['mysql_container_name']}:{dot_environment['mysql_port']}/{config['mysql']['database_name']}"
+        f"@{dot_environment['mysql_container_name']}:3306/{config['mysql']['database_name']}"
     )
 
     return config
