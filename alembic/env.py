@@ -63,6 +63,8 @@ def run_migrations_online():
     config.set_main_option("sqlalchemy.url", net.globals.CONFIG["mysql_connection_string"])
 
     print(f"\n\n\nand my database access is at zzz{net.globals.CONFIG['mysql_connection_string']}\n\n\n")
+    print(config.get_section(config.config_ini_section))
+    print("\n\n\n")
 
     connectable = engine_from_config(
         config.get_section(config.config_ini_section),
