@@ -26,6 +26,9 @@ def get_config() -> dict:
     # Load environment variables
     dot_environment = pydotenv.Environment(file_path=config["environment_variables_file"])
 
+    print("\n\n\nDot environment")
+    print(dot_environment)
+
     config["mysql_connection_string"] = (
         f"mysql://root:{dot_environment['mysql_password']}"
         f"@{dot_environment['mysql_container_name']}:3306/{config['mysql']['database_name']}"
