@@ -32,6 +32,7 @@ def get_config() -> dict:
     )
 
     print("\n\n\n")
+    print("mysql connection string is")
     print(config["mysql_connection_string"])
     print("\n\n\n")
 
