@@ -36,6 +36,7 @@ jobs:
           pip install invoke
       - name: start backend services
         run: invoke docker.compose-up --environment test
+      - run: docker network ls
       - name: run commit stage tests
         run: |
           docker run --rm -v $PWD:/app --network test_fastapi_demo_network \
