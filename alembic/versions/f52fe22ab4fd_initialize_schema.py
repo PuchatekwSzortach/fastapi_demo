@@ -7,10 +7,7 @@ Create Date: 2021-05-20 12:34:30.546068
 """
 from sqlalchemy.sql.expression import null
 from alembic import op
-import alembic.context
 import sqlalchemy as sa
-
-import sqlalchemy_utils
 
 
 # revision identifiers, used by Alembic.
@@ -21,12 +18,6 @@ depends_on = None
 
 
 def upgrade():
-
-    url = alembic.context.config.get_main_option("sqlalchemy.url")
-
-    if not sqlalchemy_utils.functions.database_exists(url=url):
-
-        sqlalchemy_utils.functions.create_database(url=url)
 
     op.create_table(
         'user',
