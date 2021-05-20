@@ -6,7 +6,6 @@ import functools
 import os
 
 import pydotenv
-import sqlalchemy_utils.functions
 import yaml
 
 
@@ -30,14 +29,6 @@ def get_config() -> dict:
         f"mysql://root:{dot_environment['mysql_password']}"
         f"@{dot_environment['mysql_container_name']}:3306/{config['mysql']['database_name']}"
     )
-
-    # It's very dirty to create database in get_config.
-    # This is just a temporary solution until we can hopefully move this responsibility to alembic
-    if not sqlalchemy_utils.functions.database_exists(url=config["mysql_connection_string"]):
-
-        sqlalchemy_utils.functions.create_database(
-            url=config["mysql_connection_string"]
-        )
 
     return config
 

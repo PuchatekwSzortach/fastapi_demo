@@ -6,6 +6,9 @@ import os
 
 import fastapi.testclient
 import pytest
+import sqlalchemy_utils.functions
+
+import alembic.config
 
 import net.applications
 import net.globals
@@ -25,8 +28,23 @@ def fixture_test_config() -> dict:
     return net.globals.get_config()
 
 
+@pytest.fixture(scope="session", name="build_database_schema")
+def fixture_build_database_schema(test_config):
+    """
+    Run database schema migrations
+    """
+
+    url = test_config["mysql_connection_string"]
+
+    if not sqlalchemy_utils.functions.database_exists(url=url):
+
+        sqlalchemy_utils.functions.create_database(url=url)
+
+    alembic.config.main(["upgrade", "head"])
+
+
 @pytest.fixture(scope="function", name="initialize_services")
-def fixture_initialize_services():
+def fixture_initialize_services(build_database_schema):
     """
     Initialize services:
     - delete users data

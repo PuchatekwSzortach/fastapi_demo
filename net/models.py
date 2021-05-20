@@ -87,9 +87,6 @@ engine = sqlalchemy.create_engine(
 session_maker = sqlalchemy.orm.sessionmaker(bind=engine)
 
 
-Base.metadata.create_all(engine)
-
-
 user_db = fastapi_users.db.SQLAlchemyUserDatabase(
     user_db_model=UserDB,
     database=database,
