@@ -37,7 +37,7 @@ jobs:
       - name: start backend services
         run: invoke docker.compose-up --environment test
       - name: wait for docker containers to initialize - a very crude solution
-        run: sleep 20 && docker logs fastapi_demo_mysql_test
+        run: sleep 10 && docker logs fastapi_demo_mysql_test
       - name: run commit stage tests
         run: |
           docker run --rm -v $PWD:/app --network test_fastapi_demo_network \
