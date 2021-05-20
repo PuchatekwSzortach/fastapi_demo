@@ -1,3 +1,6 @@
 environment: "development"
 json_web_token_name: "development_web_tokens"
-database_url: "sqlite:////tmp/fastapi_demo_database_development.db"
+environment_variables_file: ".env.development.env"
+
+mysql:
+  database_name: "fastapi_demo_development"

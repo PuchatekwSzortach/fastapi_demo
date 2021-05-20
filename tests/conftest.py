@@ -12,8 +12,8 @@ import net.globals
 import net.models
 
 
-@pytest.fixture(scope="session")
-def test_config() -> dict:
+@pytest.fixture(scope="session", name="test_config")
+def fixture_test_config() -> dict:
     """
     Get test configuration
 
@@ -34,6 +34,7 @@ def fixture_initialize_services():
 
     # Delete users table data
     session = net.models.session_maker()
+    session.query(net.models.ItemsTable).delete()
     session.query(net.models.UserTable).delete()
     session.commit()
 
@@ -51,37 +52,38 @@ def bootstrap_user_data(initialize_services) -> tuple[fastapi.testclient.TestCli
     """
 
     app = net.applications.get_fastapi_app()
-    client = fastapi.testclient.TestClient(app)
 
-    response = client.post(
-        "/register",
-        json={
-            "email": "kuba@buba.com",
-            "password": "testtest"
-        }
-    )
-
-    response = client.post("/login", data={
-        "username": "kuba@buba.com",
-        "password": "testtest"
-    })
-
-    access_token = response.json()["access_token"]
-
-    items = [
-        {"name": "carrots", "age": "10"},
-        {"name": "beans", "age": "20"},
-        {"name": "eggs", "age": "1000"}
-    ]
-
-    for item in items:
+    with fastapi.testclient.TestClient(app) as client:
 
         response = client.post(
-            "/items",
-            json=item,
-            headers={"Authorization": f"Bearer {access_token}"}
+            "/register",
+            json={
+                "email": "kuba@buba.com",
+                "password": "testtest"
+            }
         )
 
-        assert response.status_code == 201
+        response = client.post("/login", data={
+            "username": "kuba@buba.com",
+            "password": "testtest"
+        })
 
-    return client, access_token
+        access_token = response.json()["access_token"]
+
+        items = [
+            {"name": "carrots", "age": "10"},
+            {"name": "beans", "age": "20"},
+            {"name": "eggs", "age": "1000"}
+        ]
+
+        for item in items:
+
+            response = client.post(
+                "/items",
+                json=item,
+                headers={"Authorization": f"Bearer {access_token}"}
+            )
+
+            assert response.status_code == 201
+
+        yield client, access_token

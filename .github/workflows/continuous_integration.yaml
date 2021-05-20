@@ -28,6 +28,17 @@ jobs:
         with:
           tags: puchatek_w_szortach/fastapi_demo:latest
           file: ./docker/app.Dockerfile
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9.5'
+      - name: install dependencies
+        run: |
+          pip install invoke
+      - name: start backend services
+        run: invoke docker.compose-up --environment test
+      - name: wait for docker containers to initialize - a very crude solution
+        run: sleep 10
       - name: run commit stage tests
         run: |
-          docker run --rm -v $PWD:/app puchatek_w_szortach/fastapi_demo:latest invoke tests.commit-stage
+          docker run --rm -v $PWD:/app --network test_fastapi_demo_network \
+          puchatek_w_szortach/fastapi_demo:latest invoke tests.commit-stage

@@ -95,7 +95,7 @@ def run_docker_compose_command(context: invoke.Context, environment: str, comman
     env_file_path = f".env.{environment}.env"
 
     command = f"docker-compose --project-name {environment} --env-file {env_file_path} {command}"
-    context.run(command, pty=True, echo=True)
+    context.run(command, echo=True)
 
 
 @invoke.task

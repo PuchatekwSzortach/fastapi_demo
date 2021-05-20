@@ -51,7 +51,9 @@ class UserDB(User, fastapi_users.models.BaseUserDB):
     uniquifier: typing.Optional[str]
 
 
-DATABASE_URL = net.globals.CONFIG["database_url"]
+DATABASE_URL = net.globals.CONFIG["mysql_connection_string"]
+
+
 database = databases.Database(DATABASE_URL)
 
 Base: sqlalchemy.ext.declarative.DeclarativeMeta = sqlalchemy.ext.declarative.declarative_base()
@@ -78,7 +80,7 @@ class ItemsTable(Base):
 
 
 engine = sqlalchemy.create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
+    DATABASE_URL
 )
 
 
