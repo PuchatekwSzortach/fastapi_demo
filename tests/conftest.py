@@ -69,10 +69,11 @@ def bootstrap_user_data(initialize_services) -> tuple[fastapi.testclient.TestCli
         tuple[fastapi.testclient.TestClient, str]: test client for the app, access token for registered user
     """
 
-    app = net.applications.get_fastapi_app()
+    app = net.applications.get_configured_fastapi_app(allow_password_login=True)
 
     with fastapi.testclient.TestClient(app) as client:
 
+        # Register user
         response = client.post(
             "/register",
             json={

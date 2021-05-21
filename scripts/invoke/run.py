@@ -11,7 +11,7 @@ def web(context):
     Run web server
     """
 
-    command = "uvicorn --factory net.applications:get_fastapi_app --host 0.0.0.0 --reload"
+    command = "uvicorn --factory net.applications:get_default_fastapi_app --host 0.0.0.0 --reload"
 
     context.run(
         command,
