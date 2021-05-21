@@ -6,9 +6,11 @@ import random
 import typing
 
 import fastapi
+import sqlalchemy
 import starlette.status
 
 import net.authentication
+import net.dependencies
 import net.models
 
 
@@ -17,13 +19,12 @@ router = fastapi.APIRouter()
 
 @router.get("/items", response_model=typing.List[net.models.ItemResponse])
 def get_items(
-    user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())
+    user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user()),
+    session: sqlalchemy.orm.session.Session = fastapi.Depends(net.dependencies.yield_mysql_session)
 ):
     """
     Get data about all items
     """
-
-    session = net.models.session_maker()
 
     items = session.query(net.models.ItemsTable).filter(
         net.models.ItemsTable.owner_id == str(user.id)
@@ -35,12 +36,11 @@ def get_items(
 @router.get("/items/{item_id}", response_model=net.models.ItemResponse)
 def get_selected_item(
         item_id: str,
-        user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())):
+        user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user()),
+        session: sqlalchemy.orm.session.Session = fastapi.Depends(net.dependencies.yield_mysql_session)):
     """
     Get data about specified user
     """
-
-    session = net.models.session_maker()
 
     item = session.query(net.models.ItemsTable).filter(
         net.models.ItemsTable.owner_id == str(user.id),
@@ -56,12 +56,11 @@ def get_selected_item(
 @router.post("/items", response_model=net.models.ItemResponse, status_code=201)
 def post_item(
         item_data: net.models.ItemPostRequest,
-        user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user())):
+        user: net.models.User = fastapi.Depends(net.models.fastapi_users_app.current_user()),
+        session: sqlalchemy.orm.session.Session = fastapi.Depends(net.dependencies.yield_mysql_session)):
     """
     Create a new item
     """
-
-    session = net.models.session_maker()
 
     database_item = net.models.ItemsTable(
         id=str(random.randint(0, 1000)),
