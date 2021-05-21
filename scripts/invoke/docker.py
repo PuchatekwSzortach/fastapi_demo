@@ -46,7 +46,8 @@ def run(context):
             # Attach container to same network as docker-compose set up for backend services
             "-v $PWD:/app:delegated "
             f"-v {tmp_directory_path}:/tmp "
-            "-p 8000:8000 "
+            "-p 8000:8000 "  # main app
+            "-p 8089:8089 "  # locust
             "puchatek_w_szortach/fastapi_demo:latest"
         )
 
