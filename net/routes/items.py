@@ -2,8 +2,8 @@
 Items routes
 """
 
-import random
 import typing
+import uuid
 
 import fastapi
 import sqlalchemy
@@ -63,7 +63,7 @@ def post_item(
     """
 
     database_item = net.models.ItemsTable(
-        id=str(random.randint(0, 1000)),
+        id=str(uuid.uuid4()),
         owner_id=str(user.id),
         name=item_data.name
     )

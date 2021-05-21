@@ -90,9 +90,9 @@ def bootstrap_user_data(initialize_services) -> tuple[fastapi.testclient.TestCli
         access_token = response.json()["access_token"]
 
         items = [
-            {"name": "carrots", "age": "10"},
-            {"name": "beans", "age": "20"},
-            {"name": "eggs", "age": "1000"}
+            {"name": "carrots"},
+            {"name": "beans"},
+            {"name": "eggs"}
         ]
 
         for item in items:

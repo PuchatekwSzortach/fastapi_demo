@@ -19,7 +19,7 @@ def get_default_fastapi_app() -> fastapi.FastAPI:
         fastapi.FastAPI: configured fastapi app
     """
 
-    return get_configured_fastapi_app(allow_password_login=False)
+    return get_configured_fastapi_app(allow_password_login=True)
 
 
 def get_configured_fastapi_app(allow_password_login: str) -> fastapi.FastAPI:
