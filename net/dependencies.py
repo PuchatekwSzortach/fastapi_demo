@@ -2,12 +2,16 @@
 Module with common dependencies
 """
 
+import contextlib
+import typing
+
 import sqlalchemy.orm.session
 
 import net.models
 
 
-def yield_mysql_session() -> sqlalchemy.orm.session.Session:
+@contextlib.contextmanager
+def yield_mysql_session():
     """
     Creates mysql session, closes it after yield
 

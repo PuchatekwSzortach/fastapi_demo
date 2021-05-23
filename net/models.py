@@ -80,7 +80,11 @@ class ItemsTable(Base):
 
 
 engine = sqlalchemy.create_engine(
-    DATABASE_URL
+    DATABASE_URL,
+    pool_size=5,
+    max_overflow=0,
+    pool_recycle=120,  # seconds after which inactive connection is recycled
+    pool_timeout=10  # seconds after which request for new connection times out
 )
 
 
